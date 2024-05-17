@@ -41,17 +41,14 @@ class Ns_Followers:
 
         response = self.requests.post('https://nitrofollow.com/nitrof/api/v3/login-v6', headers=self.headers, data=data)
         print(response.text)
-        response_data = response.json()
-user_data = response_data.get('user')
+        user_data = response_json.get('user')
 if user_data and 'api_token' in user_data:
-    api_token = user_data['api_token']
-    self.__api_token = self.__AES_NoPadding.decrypt(bytes.fromhex(api_token))
+    api_token_hex = user_data['api_token']
+    self.__api_token = self.__AES_NoPadding.decrypt(bytes.fromhex(api_token_hex))
 else:
-    # Handle the absence of the 'user' or 'api_token' key in the response
-    print("Error: 'user' key or 'api_token' key is missing in the response.")
-    self.__api_token = None  # or other appropriate handling
-        if 'user' in response.json():
-    # Lines of code within this block should be indented at the same level.
+    print("Error: 'user' key or 'api_token' not found in the response.")
+    # Handle the error appropriately. You may want to log the error, raise an exception, or return.
+       
     self.__coins = self.__AES_NoPadding.decrypt(bytes.fromhex(response.json()['user']['coins_count']))
         return response.text
 git add Ns_Followers.py
