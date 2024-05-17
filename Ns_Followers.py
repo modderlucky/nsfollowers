@@ -11,9 +11,9 @@ class Ns_Followers:
         self.requests=requests
         self.__AES_NoPadding = AES_CBC_NoPadding()
 
-        self.__userid='65981713037' #Enter UserID Here
-        self.__username='modderlucky'#Enter UserName Here
-        self._session='65981713037:sXy1Yz2rZ31EAp:15:AYcCT0AVcKuIUTxT9KgC2OGK1wSQG6GMO7Z6172s-g' #Enter SessionID Here
+        self.__userid='58376188863' #Enter UserID Here
+        self.__username='mrsaanch8654'#Enter UserName Here
+        self._session='58376188863:dtRa6bG9JvrHqH:26:AYdJSqb5yvsBQU6NYZCbns2LDQua2OHaD2a1-5UCKg' #Enter SessionID Here
 
         self.__Pk=self.__userid.encode()+b'*'+str(random.randint(111,999)).encode()
         self.__Ip=os.urandom(8).hex().encode()+b'*'+str(random.randint(111,999)).encode()
@@ -42,13 +42,15 @@ class Ns_Followers:
 
         response = self.requests.post('https://nitrofollow.com/nitrof/api/v3/login-v6', headers=self.headers, data=data)
         print(response.text)
-        user_data = response_json.get('user')
+        response_data = response.json()
+user_data = response_data.get('user')
 if user_data and 'api_token' in user_data:
-    api_token_hex = user_data['api_token']
-    self.__api_token = self.__AES_NoPadding.decrypt(bytes.fromhex(api_token_hex))
+    api_token = user_data['api_token']
+    self.__api_token = self.__AES_NoPadding.decrypt(bytes.fromhex(api_token))
 else:
-    print("Error: 'user' key or 'api_token' not found in the response.")
-    # Handle the error appropriately. You may want to log the error, raise an exception, or return.
+    # Handle the absence of the 'user' or 'api_token' key in the response
+    print("Error: 'user' key or 'api_token' key is missing in the response.")
+    self.__api_token = None  # or other appropriate handling
         self.__coins = self.__AES_NoPadding.decrypt(bytes.fromhex(response.json()['user']['coins_count']))
 
         return response.text
